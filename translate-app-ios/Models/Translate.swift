@@ -7,21 +7,21 @@
 
 import Foundation
 
-struct Translation: Codable {
+struct Translation: Decodable {
     let text: String
-    //let pronunciation: Pronunciation
+    let pronunciation: Pronunciation
     
-    enum CodableKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case text = "destination-text"
-        //case pronunciation = "pronunciation"
+        case pronunciation = "pronunciation"
     }
 }
 
-struct Pronunciation: Codable {
-    let inputAudio: String?
-    let outputAudio: String?
+struct Pronunciation: Decodable {
+    let inputAudio: String
+    let outputAudio: String
     
-    enum CodableKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case inputAudio = "source-text-audio"
         case outputAudio = "destination-text-audio"
     }

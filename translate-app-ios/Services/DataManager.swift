@@ -15,24 +15,15 @@ enum Link: String {
 final class DataManager {
     static let shared = DataManager()
     
-    private init() {}
+    private(set) var languages: [String: String] = [:]
     
-    //    func getLanguages(completion: @escaping ([Language]) -> Void) {
-    //        let url = Link.languages.rawValue
-    //
-    //        NetworkManager.shared.fetch(Language.self, from: url) { result in
-    //            switch result {
-    //            case .success(let searchResult):
-    //                completion(searchResult.languages)
-    //            }
-    //        }
-    //    }
+    private init() {}
     
     func translate(
         from: String,
         to: String,
         _ text: String,
-        completion: @escaping (Translation) -> Void
+        completion: @escaping (Translation?) -> Void
     ) {
         let url = Link.translate.rawValue + "sl=" + from + "&dl=" + to + "&text=" + text
         
@@ -42,7 +33,24 @@ final class DataManager {
                 completion(translateResult)
             case .failure(let error):
                 print("DataManager Error:", error)
-                completion(Translation(text: ""))//, pronunciation: Pronunciation(inputAudio: "", outputAudio: "")))
+                completion(nil)
+            }
+        }
+    }
+    
+    func getLanguage() {
+        let url = Link.languages.rawValue
+        NetworkManager.shared.fetch([String: String].self, from: url) { [weak self] result in
+            switch result {
+            case .success(let results):
+                guard let self else { return }
+                results.forEach{ key, value in
+                    let language = value.capitalized
+                    let code = key
+                    self.languages[language] = code
+                }
+            case .failure(let error):
+                print("DataManager Error:", error)
             }
         }
     }

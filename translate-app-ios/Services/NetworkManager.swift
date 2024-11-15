@@ -19,27 +19,16 @@ final class NetworkManager {
     private init() {}
     
     func fetch<T: Decodable>(_ type: T.Type, from url: String, completion: @escaping(Result<T, NetworkError>) -> Void) {
-        
-        #warning("Delete Debug")
-        print("url: \(url)\n")
-        
         guard let url = URL(string: url) else {
             completion(.failure(.invalidURL))
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            #warning("Delete Debug")
-            print("data: \(data)\n")
-            print("response: \(response)\n")
-            print("error: \(error)\n")
-            
             guard let data else {
                 print(error ?? "No error description")
                 return
             }
-            
             do {
                 let dataModel = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(dataModel))

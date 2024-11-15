@@ -48,6 +48,10 @@ final class TranslateView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(translate: String) {
+        outputLabel.text = translate
+    }
+    
     @objc func translateButtonTapped() {
         delegate?.buttonTapped(inputTextField.text ?? "")
     }
