@@ -15,7 +15,7 @@ enum Link: String {
 final class DataManager {
     static let shared = DataManager()
     
-    private(set) var languages: [String: String] = [:]
+    //private(set) var languages: [String: String] = [:]
     
     private init() {}
     
@@ -38,17 +38,20 @@ final class DataManager {
         }
     }
     
-    func getLanguage() {
+    func getLanguage(completion: @escaping ([String: String]) -> Void) {
         let url = Link.languages.rawValue
         NetworkManager.shared.fetch([String: String].self, from: url) { [weak self] result in
             switch result {
             case .success(let results):
                 guard let self else { return }
+                var languages: [String: String] = [:]
                 results.forEach{ key, value in
                     let language = value.capitalized
                     let code = key
-                    self.languages[language] = code
+                    languages[language] = code
                 }
+                completion(languages)
+                print("Languag list downloaded")
             case .failure(let error):
                 print("DataManager Error:", error)
             }
