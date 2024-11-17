@@ -36,7 +36,11 @@ final class TranslateViewController: UIViewController {
 
 extension TranslateViewController: TranslateViewDelegate {
     func buttonTapped(_ text: String) {
-        DataManager.shared.translate(from: "en", to: "ru", text) { translation in
+        DataManager.shared.translate(
+            from: languagesCodes[inputLanguages] ?? "",
+            to: languagesCodes[outputLanguages] ?? "ru",
+            text
+        ) { translation in
             DispatchQueue.main.async { [weak self] in
                 guard let self, let translation else { return }
                 translateView.configure(translate: translation.text)
