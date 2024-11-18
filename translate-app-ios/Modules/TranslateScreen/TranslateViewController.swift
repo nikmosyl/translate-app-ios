@@ -31,6 +31,9 @@ final class TranslateViewController: UIViewController {
                 translateView.outputTable.reloadData()
             }
         }
+        
+        translateView.setInputLanguage(inputLanguages)
+        translateView.setOutputLanguage(outputLanguages)
     }
 }
 
@@ -43,7 +46,7 @@ extension TranslateViewController: TranslateViewDelegate {
         ) { translation in
             DispatchQueue.main.async { [weak self] in
                 guard let self, let translation else { return }
-                translateView.configure(translate: translation.text)
+                translateView.translate(text: translation.text)
             }
         }
     }
@@ -59,7 +62,12 @@ extension TranslateViewController: TranslateViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView === translateView.inputTable ? print("INPUT TABLE") : print("UNKNOWN TABLE")
-        print("indexPath:", indexPath.row, "languages:", languages[indexPath.row])
+        if tableView === translateView.inputTable {
+            inputLanguages = languages[indexPath.row]
+            translateView.setInputLanguage(inputLanguages)
+        } else {
+            outputLanguages = languages[indexPath.row]
+            translateView.setOutputLanguage(outputLanguages)
+        }
     }
 }

@@ -37,14 +37,12 @@ final class TranslateView: UIView {
     let inputTable: UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.backgroundColor = .red
         return table
     }()
     
     let outputTable: UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.backgroundColor = .red
         return table
     }()
     
@@ -68,8 +66,16 @@ final class TranslateView: UIView {
         outputTable.dataSource = delegate
     }
     
-    func configure(translate: String) {
-        outputTextView.text = translate
+    func translate(text: String) {
+        outputTextView.text = text
+    }
+    
+    func setInputLanguage(_ language: String) {
+        inputPicker.setTitle(language, for: .normal)
+    }
+    
+    func setOutputLanguage(_ language: String) {
+        outputPicker.setTitle(language, for: .normal)
     }
     
     @objc func translateButtonTapped() {
